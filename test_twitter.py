@@ -19,6 +19,8 @@ class TestTwitter(unittest.TestCase):
 
         # Act & Assert
         self.assertEqual(twitter.send_tweet("Test tweet"), 1)
+
+        twitter.TIME_OF_LAST_TWEET = 0
         self.assertEqual(twitter.send_tweet("oogabooga chongawonga"), 1)
 
         # Confirm mock was called with expected text

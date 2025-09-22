@@ -42,11 +42,12 @@ def format(products: dict) -> str:
 def send_tweet(text: str) -> int:
 
     global TIME_OF_LAST_TWEET
+    now = time.time()
+    
     if now - TIME_OF_LAST_TWEET < COOLDOWN:
         logging.warning("Rate limit reached.")
         return 0
 
-    now = time.time()
     try:
         api.update_status(text)
         logging.info(f"✅ Tweet sent succesfully {text}")
