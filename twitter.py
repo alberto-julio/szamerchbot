@@ -3,6 +3,7 @@ import os
 import tweepy
 import time
 import logging
+import json
 
 load_dotenv()
 logging.basicConfig(level=logging.INFO)
