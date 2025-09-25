@@ -1,9 +1,11 @@
 from bs4 import BeautifulSoup
 import requests
 import json
-import re
 import time
 import logging
+import os
+
+
 
 sza_url = "https://txdxe.com/collections/sza"
 not_url = "https://www.notbeauty.com/"
@@ -12,12 +14,14 @@ not_url = "https://www.notbeauty.com/"
 grand_tour_url = "https://shop.grandnationaltour.com/"
 
 
-def load_config(products: str = "") -> dict:
-    with open(products, 'r') as file:
+def load_config(products: str) -> dict:
+    base_dir = os.path.dirname(__file__)
+    path = os.path.join(base_dir, products)
+    with open(path, 'r') as file:
         data = json.load(file)
     return data
 
-config = load_config()
+config = load_config('config/config.json')
 
 def fetch_page(url: str) -> str:
     headers = {}
@@ -30,7 +34,6 @@ def parse_products(html: str, selectors: dict) -> list[dict[str, str]]:
     
     soup = BeautifulSoup(html, "html.parser")
     product_list = []
-
     items = soup.select(selectors['item'])
 
     for item in items:
@@ -52,33 +55,47 @@ def parse_products(html: str, selectors: dict) -> list[dict[str, str]]:
 def check_stock(product: dict, stock_indicator: dict) -> str:
 
     stock_text = product.get("stock", "").lower()
-
     for phrase in stock_indicator.get("in_stock", []):
         if phrase.lower() in stock_text:
             return "in_stock"
-
     for phrase in stock_indicator.get("sold_out", []):
         if phrase.lower() in stock_text:
             return "sold_out"
     return "unknown"
 
 
-def run_scraper(config: dict) -> None:
+def run_scraper(config: dict) -> list[dict[str, str]]:
 
-    for sites in config['sites']:
-        selectors = sites['selectors']
-        stock = sites['stock_indicators']
-        delay = sites["scraper_settings"]['delay_seconds']
+    all_results = []
 
-        for page in sites['pages']:
-            html = fetch_page(page)
-            products = parse_products(html, selectors)
+    for site in config["sites"]:
+        selectors = site["selectors"]
+        stock_indicators = site["stock_indicators"]
+        delay = site["scraper_settings"]["delay_seconds"]
+        base_url = site["base_url"]
 
-            for product in products:
-                if check_stock(product, stock):
-                    x = 0
-            
-            time.sleep(delay)
+        for page in site["pages"]:
+            try:
+                html = fetch_page(page)
+                products = parse_products(html, selectors)
 
+                for product in products:
+                    status = check_stock(product, stock_indicators)
+                    product["status"] = status
+
+                    if product["link"].startswith("/"):
+                        product["link"] = base_url.rstrip("/") + product["link"]
+
+                    
+                    product["site"] = site["name"]
+
+                    all_results.append(product)
+
+                time.sleep(delay)
+
+            except Exception as e:
+                logging.error(f"Error scraping {page}: {e}")
+
+    return all_results
 
 
