@@ -33,6 +33,9 @@ def token_call(text: str):
 def format(products: dict) -> str:
 
     #Sold Out: Taylor Swift | The Eras Tour Pink T-Shirt - S - Price: 39.15  https://store.taylorswift.com/products/the-eras-tour-pink-t-shirt VpNeed faster alerts? Check Out @popvinylsigned
+    # SOLD OUT: [PRODUCT NAME HERE] in SIZE - PRICE: [number] LINK. Follow @szamerchbot for more.
+    # BACK IN STOCK: [PRODUCT NAME HERE ] in SIZE - PRICE: [number] DIRECT CHECKOUT LINK? Follow @szamerchbot for more.
+    # idk what other tweets we would need 
 
     formatted_tweet = f"{products} "
     return formatted_tweet
