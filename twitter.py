@@ -30,10 +30,18 @@ COOLDOWN = 30
 def token_call(text: str):
     return text
 
+
+# def sold_out_format(product_name, size, price, product_link, link):
+   # formatted_tweet = f"SOLD OUT: {product_name} in {size} - PRICE: {price} {link}. Follow @szamerchbot for more."
+    # return formatted_tweet
+
+# def back_in_stock_form(product_name, size, price, product_link, checkout_link):
+    # formatted_tweet = f"BACK IN STOCK: {product_name} in {size} - PRICE {number} checkout_link. Follow @szamerchbot for more."
+    # return formatted_tweet
 def format(products: dict) -> str:
 
     #Sold Out: Taylor Swift | The Eras Tour Pink T-Shirt - S - Price: 39.15  https://store.taylorswift.com/products/the-eras-tour-pink-t-shirt VpNeed faster alerts? Check Out @popvinylsigned
-    # SOLD OUT: [PRODUCT NAME HERE] in SIZE - PRICE: [number] LINK. Follow @szamerchbot for more.
+    # SOLD OUT: [PRODUCT NAME HERE] in SIZE/COLOR - PRICE: [number] LINK. Follow @szamerchbot for more.
     # BACK IN STOCK: [PRODUCT NAME HERE ] in SIZE - PRICE: [number] DIRECT CHECKOUT LINK? Follow @szamerchbot for more.
     # idk what other tweets we would need 
 
