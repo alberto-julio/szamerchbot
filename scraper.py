@@ -5,8 +5,6 @@ import time
 import logging
 import os
 
-
-
 sza_url = "https://txdxe.com/collections/sza"
 not_url = "https://www.notbeauty.com/"
 

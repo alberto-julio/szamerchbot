@@ -1,7 +1,7 @@
 # main.py
 import time
 from scraper import run_scraper, load_config
-from twitter import send_tweet  # assuming you wrote this in twitter.py
+from twitter import send_tweet, format
 
 def main():
     # Load config
@@ -13,7 +13,7 @@ def main():
 
         # If there are new products in stock, tweet them
         for alert in alerts:
-            message = f"{alert['title']} is now {alert['stock']} at {alert['link']} for {alert['price']}"
+            message = format()
             send_tweet(message)
 
         # Sleep between runs (you can also get this from config if you want)

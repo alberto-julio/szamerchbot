@@ -30,20 +30,16 @@ COOLDOWN = 30
 def token_call(text: str):
     return text
 
-def format(products: dict) -> str:
-
-    #Sold Out: Taylor Swift | The Eras Tour Pink T-Shirt - S - Price: 39.15  https://store.taylorswift.com/products/the-eras-tour-pink-t-shirt VpNeed faster alerts? Check Out @popvinylsigned
-
-    formatted_tweet = f"{products} "
-    return formatted_tweet
-
-
+def format(product: dict) -> str:
+    """Convert product info into tweet text."""
+    tweet = f"{product['title']} - {product['price']}\nStatus: {product['status']}\n{product['link']} Follow @szamerchbot for more."
+    return tweet[:280]
 
 def send_tweet(text: str) -> int:
 
     global TIME_OF_LAST_TWEET
     now = time.time()
-    
+
     if now - TIME_OF_LAST_TWEET < COOLDOWN:
         logging.warning("Rate limit reached.")
         return 0
