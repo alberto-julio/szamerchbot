@@ -84,7 +84,7 @@ class Testing(unittest.TestCase):
                         "in_stock": ["Add to Cart"],
                         "sold_out": ["Sold Out"]
                     },
-                    "scraper_settings": {"delay_seconds": 0, "max_retries": 1}
+                    "scraper_settings": {"delay_seconds": 3, "max_retries": 1}
                 }
             ]
         }
@@ -94,6 +94,51 @@ class Testing(unittest.TestCase):
         self.assertEqual(results[0]["status"], "in_stock")
         self.assertEqual(results[0]["site"], "DemoSite")
         self.assertIn("https://demosite.com/p1", results[0]["link"])
+
+    @patch("scraper.requests.get")
+    def test_parse_product_mock(self, mock_get):
+        """Unit test with mocked HTML response"""
+        # Fake HTML snippet that matches your selectors
+        fake_html = """
+        <html>
+            <body>
+                <div class="product">
+                    <h2 class="title">Test Item</h2>
+                    <span class="price">$19.99</span>
+                    <span class="status">In Stock</span>
+                    <a href="https://example.com/item">Link</a>
+                </div>
+            </body>
+        </html>
+        """
+        mock_response = MagicMock()
+        mock_response.text = fake_html
+        mock_get.return_value = mock_response
+
+        config = {
+            "sites": [
+                {
+                    "name": "TestShop",
+                    "base_url": "https://example.com",
+                    "pages": ["https://example.com/test"],
+                    "selectors": {
+                        "item": ".product",
+                        "title": ".title",
+                        "price": ".price",
+                        "status": ".status",
+                        "link": "a"
+                    }
+                }
+            ]
+        }
+
+        results = scraper.run_scraper(config)
+        self.assertEqual(len(results), 1)
+        product = results[0]
+        self.assertEqual(product["title"], "Test Item")
+        self.assertEqual(product["price"], "$19.99")
+        self.assertEqual(product["status"], "In Stock")
+        self.assertTrue(product["link"].startswith("https://"))
 
 if __name__ == '__main__':
     unittest.main()
