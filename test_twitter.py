@@ -4,18 +4,10 @@ import twitter
 
 class TestTwitter(unittest.TestCase):
 
-    def test_calls(self):
-        self.assertIsNotNone(twitter.token_call(twitter.ACCESS_TOKEN))
-        self.assertIsNotNone(twitter.token_call(twitter.ACCESS_TOKEN_SECRET))
-        self.assertIsNotNone(twitter.token_call(twitter.API_KEY))
-        self.assertIsNotNone(twitter.token_call(twitter.API_KEY_SECRET))
-        self.assertIsNotNone(twitter.token_call(twitter.BEARER_TOKEN))
-
-
-    @patch("twitter.api.update_status")
-    def test_send_tweet(self, mock_update_status):
-        # Arrange: mock update_status so it doesn’t hit Twitter
-        mock_update_status.return_value = None
+    @patch("twitter.client.create_tweet")
+    def test_send_tweet(self, mock_create_tweet):
+        # Arrange: mock create_tweet so it doesn’t hit Twitter
+        mock_create_tweet.return_value = {"data": {"id": "1234567890", "text": "Test tweet"}}
 
         # Act & Assert
         self.assertEqual(twitter.send_tweet("Test tweet"), 1)
@@ -24,8 +16,8 @@ class TestTwitter(unittest.TestCase):
         self.assertEqual(twitter.send_tweet("oogabooga chongawonga"), 1)
 
         # Confirm mock was called with expected text
-        mock_update_status.assert_any_call("Test tweet")
-        mock_update_status.assert_any_call("oogabooga chongawonga")
+        mock_create_tweet.assert_any_call(text="Test tweet")
+        mock_create_tweet.assert_any_call(text="oogabooga chongawonga")
 
 if __name__ == '__main__':
     unittest.main()

@@ -3,6 +3,8 @@ import time
 from scraper import run_scraper, load_config
 from twitter import send_tweet, format
 
+
+#runs everything and makes it so that our bot is accessing the websites and twitter
 def main():
     # Load config
     config = load_config("config/config.json")
@@ -20,4 +22,5 @@ def main():
         time.sleep(60)
 
 if __name__ == "__main__":
+    send_tweet("🚀 This is a test tweet, We 💚 SZA!!")
     main()

@@ -12,6 +12,8 @@ not_url = "https://www.notbeauty.com/"
 grand_tour_url = "https://shop.grandnationaltour.com/"
 
 
+#loads up our config file that you wrote so that we can use all that data within python
+#also lets the bot know what we are looking for
 def load_config(products: str) -> dict:
     base_dir = os.path.dirname(__file__)
     path = os.path.join(base_dir, products)
@@ -21,6 +23,7 @@ def load_config(products: str) -> dict:
 
 config = load_config('config/config.json')
 
+#turns the webpages into raw html so that the bot can follow the structure and know where to look for the data
 def fetch_page(url: str) -> str:
     headers = {}
     response = requests.get(url, timeout=10)
@@ -28,6 +31,9 @@ def fetch_page(url: str) -> str:
     raw_html = response.text
     return raw_html
 
+
+#this is where the bot actually goes through the website and yanks everything out and returns the data we want
+#but this only returns the products, so it is more so one of the last steps 
 def parse_products(html: str, selectors: dict) -> list[dict[str, str]]:
     
     soup = BeautifulSoup(html, "html.parser")
@@ -50,6 +56,7 @@ def parse_products(html: str, selectors: dict) -> list[dict[str, str]]:
         product_list.append(product)
     return product_list
 
+#individual function used to check our stock, usually the last step
 def check_stock(product: dict, stock_indicator: dict) -> str:
 
     stock_text = product.get("stock", "").lower()
@@ -62,6 +69,7 @@ def check_stock(product: dict, stock_indicator: dict) -> str:
     return "unknown"
 
 
+#main bread and butter for our bot, where it goes into each individual sit, webpages and calls our other functions
 def run_scraper(config: dict) -> list[dict[str, str]]:
 
     all_results = []
