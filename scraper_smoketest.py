@@ -15,7 +15,7 @@ def main():
     config = load_config('config/config.json')
 
     print("🚬 Running smoke test...")
-    results = scraper.run_scraper(config, delay=3)
+    results = scraper.run_scraper(config)
 
     print(f"✅ Pulled {len(results)} products")
     for product in results[:5]:  # only show first 5

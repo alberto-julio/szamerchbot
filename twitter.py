@@ -54,7 +54,7 @@ def send_tweet(text: str) -> int:
     if now - TIME_OF_LAST_TWEET < COOLDOWN:
         logging.warning("Rate limit reached.")
         return 0
-
+    
     try:
         client.create_tweet(text=text)
         logging.info(f"✅ Tweet sent succesfully {text}")

@@ -91,7 +91,7 @@ class Testing(unittest.TestCase):
 
         results = scraper.run_scraper(fake_config)
         self.assertEqual(len(results), 1)
-        self.assertEqual(results[0]["status"], "in_stock")
+        self.assertEqual(results[0]["stock"], "Add to Cart")
         self.assertEqual(results[0]["site"], "DemoSite")
         self.assertIn("https://demosite.com/p1", results[0]["link"])
 
@@ -105,7 +105,7 @@ class Testing(unittest.TestCase):
                 <div class="product">
                     <h2 class="title">Test Item</h2>
                     <span class="price">$19.99</span>
-                    <span class="status">In Stock</span>
+                    <span class="stock">In Stock</span>
                     <a href="https://example.com/item">Link</a>
                 </div>
             </body>
@@ -125,10 +125,20 @@ class Testing(unittest.TestCase):
                         "item": ".product",
                         "title": ".title",
                         "price": ".price",
-                        "status": ".status",
+                        "stock": ".stock",
                         "link": "a"
+                    },
+                    "stock_indicators": {
+                        "in_stock": ["In Stock"],
+                        "sold_out": ["Sold Out"]
+                    },
+                    "scraper_settings": {
+                        "delay_seconds": 1,
+                        "max_retries": 2
                     }
+
                 }
+                
             ]
         }
 
@@ -137,7 +147,7 @@ class Testing(unittest.TestCase):
         product = results[0]
         self.assertEqual(product["title"], "Test Item")
         self.assertEqual(product["price"], "$19.99")
-        self.assertEqual(product["status"], "In Stock")
+        self.assertEqual(product["status"], "in_stock")
         self.assertTrue(product["link"].startswith("https://"))
 
 if __name__ == '__main__':

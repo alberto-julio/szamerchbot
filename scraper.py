@@ -33,7 +33,7 @@ def fetch_page(url: str) -> str:
 
 
 #this is where the bot actually goes through the website and yanks everything out and returns the data we want
-#but this only returns the products, so it is more so one of the last steps 
+#but this only returns the products, used to help fill out our config
 def parse_products(html: str, selectors: dict) -> list[dict[str, str]]:
     
     soup = BeautifulSoup(html, "html.parser")
