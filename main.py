@@ -22,5 +22,5 @@ def main():
         time.sleep(60)
 
 if __name__ == "__main__":
-    send_tweet("🚀 This is a test tweet, We 💚 SZA!!")
+    
     main()
